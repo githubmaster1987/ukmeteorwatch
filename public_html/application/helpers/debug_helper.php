@@ -1,0 +1,227 @@
+<?php
+
+/**
+* Code Igniter Debug Helpers
+*
+* @package		CodeIgniter
+* @subpackage	Helpers
+* @category		Helpers
+*/
+
+// ------------------------------------------------------------------------
+
+function quark_dump($var, $return = FALSE, $use_xdebug = TRUE)
+{
+	$use_xdebug = $use_xdebug && function_exists('xdebug_var_dump');
+	if ($return)
+	{
+		if ($use_xdebug && function_exists('ob_start'))
+		{
+			ob_start();
+			xdebug_var_dump($var);
+			$out = ob_get_contents();
+			ob_end_clean();
+		}
+		else
+			$out = "<pre class='quark-dump'>" . htmlentities(var_export($var, $return), ENT_QUOTES, "utf-8") . "</pre>";
+
+		return $out;
+	}
+	else
+	{
+		if ($use_xdebug)
+			xdebug_var_dump($var);
+		else
+			echo "<pre class='quark-dump'>" . htmlentities(var_export($var, TRUE), ENT_QUOTES, "utf-8") . "</pre>";
+	}
+}
+
+// ------------------------------------------------------------------------
+
+/**
+  * Debug Helper
+  *
+  * Outputs the given variable with formatting and location
+  *
+  * @access		public
+  * @param		mixed    variable to be output
+  */
+
+function dump()
+{
+	list($callee) = debug_backtrace();
+	$arguments = $callee['args'];
+	$total_arguments = count($arguments);
+
+	echo '<fieldset style="background: #fefefe !important; border:1px red solid; padding:5px">';
+	echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+
+	$i = 0;
+	foreach ($arguments as $argument)
+	{
+		echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+		var_dump($argument);
+	}
+
+	echo "</pre>";
+	echo "</fieldset>";
+}
+
+function ddump()
+{
+	list($callee) = debug_backtrace();
+	$arguments = $callee['args'];
+	$total_arguments = count($arguments);
+
+	echo '<fieldset style="background: #fefefe !important; border:1px red solid; padding:5px">';
+	echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+
+	$i = 0;
+	foreach ($arguments as $argument)
+	{
+		echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+		var_dump($argument);
+	}
+
+	echo "</pre>";
+	echo "</fieldset>";
+	die();
+}
+
+function dd()
+{
+	list($callee) = debug_backtrace();
+	$arguments = $callee['args'];
+	$total_arguments = count($arguments);
+
+	echo '<fieldset style="background: #fefefe !important; border:1px red solid; padding:5px">';
+	echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+
+	$i = 0;
+	foreach ($arguments as $argument)
+	{
+		echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+		var_dump($argument);
+	}
+
+	echo "</pre>";
+	echo "</fieldset>";
+	die();
+}
+
+/**
+* Outputs an array or variable
+*
+* @param    $var array, string, integer
+* @return    string
+*/
+
+function debug_var($var = '')
+{
+    echo _before();
+
+    if (is_array($var))
+    {
+        print_r($var);
+    }
+	else
+    {
+        echo $var;
+    }
+
+	echo _after();
+}
+
+// --------------------------------------------------------------------
+
+/**
+* Outputs the last query
+*
+* @return    string
+*/
+
+function debug_last_query()
+{
+    $CI =& get_instance();
+    echo _before();
+    echo $CI->db->last_query();
+    echo _after();
+}
+
+// --------------------------------------------------------------------
+
+/**
+* Outputs the query result
+*
+* @param    $query object
+* @return    string
+*/
+
+function debug_query_result($query = '')
+{
+    echo _before();
+    print_r($query->result_array());
+    echo _after();
+}
+
+// --------------------------------------------------------------------
+
+/**
+* Outputs all session data
+*
+* @return    string
+*/
+
+function debug_session()
+{
+    $CI =& get_instance();
+    echo _before();
+    print_r($CI->session->all_userdata());
+    echo _after();
+}
+
+// --------------------------------------------------------------------
+
+/**
+* Logs a message or var
+*
+* @param    $message array, string, integer
+* @return    string
+*/
+
+function debug_log($message = '')
+{
+	is_array($message) ? log_message('debug', print_r($message)) : log_message('debug', $message);
+}
+
+// --------------------------------------------------------------------
+
+/**
+* _before
+*
+* @return    string
+*/
+
+function _before()
+{
+	$before = '<div style="padding:10px 20px 10px 20px; background-color:#fbe6f2; border:1px solid #d893a1; color: #000; font-size: 12px;>'."\n";
+	$before .= '<h5 style="font-family:verdana,sans-serif; font-weight:bold; font-size:18px;">Debug Helper Output</h5>'."\n";
+	$before .= '<pre>'."\n";
+	return $before;
+}
+
+// --------------------------------------------------------------------
+/**
+* _after
+*
+* @return    string
+*/
+
+function _after()
+{
+	$after = '</pre>'."\n";
+	$after .= '</div>'."\n";
+	return $after;
+}
+
+// --------------------------------------------------------------------

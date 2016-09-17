@@ -1,0 +1,18 @@
+ftp 
+addr: 		ftp.gridhost.co.uk
+user: 		web@ukmeteorwatch.co.uk
+pwd: 		m4rvrQaFZTd4NU6T
+
+
+Web
+addr: 		ukmeteorwatch.co.uk
+DB name:	ukmeteor_watch
+DB user:	ukmeteor_web
+DB password:	5wth72VSEjxz7YS2
+DB server:	10.169.0.115
+
+
+Cpanel access:
+https://control.gridhost.co.uk/
+username:	EEWebAdmin
+password:	Kg5qsPntB3j2

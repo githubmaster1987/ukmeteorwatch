@@ -1,0 +1,6 @@
+{
+    "require": {
+        "nesbot/carbon": "1.8.*",
+			"mjohnson/type-converter": "2.0.*"
+    }
+}
